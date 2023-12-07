@@ -1,0 +1,89 @@
+formatter: markdown
+
+version: ""
+
+header-from: main.tf
+footer-from: ""
+
+recursive:
+  enabled: false
+  path: modules
+
+sections:
+  hide: []
+  show: []
+
+content: |-
+  {{ .Header }}
+  # k8s
+  This module can be used to `configure and provision` the necessary `AWS resources` for a simple `Kubernetes Cluster`.
+
+  The Kuberntes Cluster AWS EC2 instances can be either `public EC2 instances` which are reachable from the internet or `private EC2 instances` which are not. However, private EC2 instances can reach the internet themselves.
+
+  The Kubernebtes AWS `EC2 instances` are of two `types`:
+  <ul>
+  <li>control plane</li>
+  <li>worker node</li>
+  </ul>
+
+  The Kubernebtes `EC2 instances are configrued` with the appropriate set of `AWS Security Groups` based on their:
+  <ul>
+  <li>Kubernetes instance type (Control plane / Worker node)</li>
+  <li>Instance scope (public / private)</li>
+  </ul>
+
+  {{ .Requirements }}
+  {{ .Providers }}
+  {{ .Modules }}
+  {{ .Resources }}
+  {{ .Inputs }}
+  {{ .Outputs }}
+
+  # Examples
+
+  ## Kubernetes Cluster: Simple
+  In this example `private control-plane and worker-node subnets` are provisioned as `public AWS subnets` with `blocked Ingress internet traffic` on `EC2 Instance Security Groups` level, however `Egress Internet access` is `allowed`.
+  ![Diagram](README-assets/examples_simple.jpg) |
+  ```hcl
+  {{ include "examples/simple/main.tf" }}
+  ```
+
+  ## Kubernetes Cluster: Advanced
+  In this example `private control-plane and worker-node subnets` are provisioned as `real private AWS subnets` (blocked Ingress internet traffic on subnet level). `Egress Internet access` follows `through a NAT Gateway` (extra costs apply).
+  ![Diagram](README-assets/examples_advanced.jpg) |
+  ```hcl
+  {{ include "examples/advanced/main.tf" }}
+  ```
+
+  {{ .Footer }}
+
+output:
+  file: README.md
+  mode: replace
+  template: |-
+    <!-- BEGIN_TF_DOCS -->
+    {{ .Content }}
+    <!-- END_TF_DOCS -->
+
+output-values:
+  enabled: false
+  from: ""
+
+sort:
+  enabled: false
+  by: name
+
+settings:
+  anchor: true
+  color: true
+  default: true
+  description: false
+  escape: true
+  hide-empty: false
+  html: true
+  indent: 2
+  lockfile: true
+  read-comments: true
+  required: true
+  sensitive: true
+  type: true
