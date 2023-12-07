@@ -1,0 +1,24 @@
+name: TerraformLint
+
+on:
+  workflow_dispatch:
+  # or
+  push:
+    # paths:
+      # - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+    - uses: actions/checkout@v3
+    - name: Install dependencies
+      run: |
+        curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+        sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main"
+        sudo apt-get update
+        sudo apt-get install terraform
+        terraform -v
+    - name: Lint/Formt terraform files
+      run: |
+        terraform fmt -check -recursive -list=true -diff .
